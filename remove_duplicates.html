@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حذف النصوص المكررة</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: center;
+            margin: 20px;
+        }
+        h1 {
+            font-size: 30px;
+        }
+        .subtitle {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            border: 2px dashed #2c3e50;
+            padding: 10px 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            background-color: #f2f2f2;
+        }
+        .counter-container {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+            flex-direction: column;
+            align-items: center;
+        }
+        .counter-label {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .counter {
+            font-size: 18px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        textarea {
+            width: 80%;
+            height: 100px;
+            margin-top: 10px;
+            border: 3px solid #333;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .contact-links {
+            margin-top: 30px;
+            font-size: 16px;
+        }
+        .contact-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        .contact-text {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>حذف النصوص المكررة</h1>
+    <p class="subtitle">دعوة حلوة منك في كل مرة تستخدم اللينك (وصلي علي النبي)</p>
+
+    <div class="counter-container">
+        <div>
+            <span class="counter-label">إجمالي النصوص: </span>
+            <span id="totalLines" class="counter">0</span>
+        </div>
+        <textarea id="inputText" placeholder="أدخل النصوص هنا..." oninput="updateLineCounts()"></textarea>
+    </div>
+
+    <div class="counter-container">
+        <div>
+            <span class="counter-label">النصوص المكررة: </span>
+            <span id="deletedLines" class="counter">0</span>
+        </div>
+        <textarea id="deletedText" readonly></textarea>
+    </div>
+
+    <div class="counter-container">
+        <div>
+            <span class="counter-label">النصوص الصافية بعد الحذف: </span>
+            <span id="uniqueLines" class="counter">0</span>
+        </div>
+        <textarea id="outputText" readonly></textarea>
+    </div>
+
+    <button onclick="removeDuplicates()">حذف النصوص المكررة</button>
+    <button onclick="saveResult()">حفظ النص النهائي</button>
+
+    <div class="contact-links">
+        <p class="contact-text">اضغط هنا للتواصل معي:</p>
+        <a href="https://wa.me/201060831181" target="_blank">واتساب</a>
+        <a href="https://t.me/HUSSEIN_TALAT20" target="_blank">تيلجرام</a>
+    </div>
+
+    <script>
+        function updateLineCounts() {
+            const inputText = document.getElementById('inputText').value;
+            const lines = inputText.trim() ? inputText.split('\n') : [];
+            document.getElementById('totalLines').textContent = lines.length;
+        }
+
+        function removeDuplicates() {
+            const inputText = document.getElementById('inputText').value;
+
+            // تقسيم النص إلى أسطر
+            const lines = inputText.split('\n');
+
+            // إزالة التكرارات
+            const uniqueLines = [...new Set(lines)];
+            const deletedLines = lines.filter(line => !uniqueLines.includes(line));
+
+            // عرض النتائج
+            document.getElementById('outputText').value = uniqueLines.join('\n');
+            document.getElementById('deletedText').value = deletedLines.join('\n');
+
+            // تحديث العدادات
+            document.getElementById('uniqueLines').textContent = uniqueLines.length;
+            document.getElementById('deletedLines').textContent = lines.length - uniqueLines.length;
+        }
+
+        function saveResult() {
+            const textToSave = document.getElementById('outputText').value;
+
+            // إنشاء ملف وتحميله
+            const blob = new Blob([textToSave], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'result.txt';
+            link.click();
+        }
+    </script>
+
+</body>
+</html>
